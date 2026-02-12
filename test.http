@@ -1,0 +1,18 @@
+### Base URL
+@baseUrl = http://localhost:8085
+
+### ----------------------------------------
+### Health Check
+GET {{baseUrl}}/
+Accept: application/json
+
+
+### ----------------------------------------
+### Example POST (if later you add API)
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "name": "Thinh",
+  "email": "thinh@example.com"
+}

@@ -1,0 +1,8 @@
+Inside your project:
+air init
+
+---
+
+
+
+
