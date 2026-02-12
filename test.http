@@ -1,6 +1,25 @@
 ### Base URL
 @baseUrl = http://localhost:8085
 
+### Valid slug
+GET http://localhost:8085/api/v2/products/iphone-15-pro
+
+### Invalid slug
+GET http://localhost:8085/api/v2/products/Iphone@123
+
+
+### Valid UUID
+GET http://localhost:8085/api/v2/users/550e8400-e29b-41d4-a716-446655440000
+
+
+### Invalid UUID
+GET http://localhost:8085/api/v2/users/123
+
+
+###
+GET {{baseUrl}}/api/v2/users
+
+
 ### ----------------------------------------
 ### Health Check
 GET {{baseUrl}}/
