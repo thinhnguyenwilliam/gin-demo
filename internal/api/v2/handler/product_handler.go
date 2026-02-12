@@ -3,9 +3,9 @@ package handler
 
 import (
 	"net/http"
-	"regexp"
 
 	"github.com/gin-gonic/gin"
+	"github.com/thinhnguyenwilliam/gin-demo/internal/pkg/validator"
 )
 
 type ProductHandler struct{}
@@ -14,22 +14,34 @@ func NewProductHandler() *ProductHandler {
 	return &ProductHandler{}
 }
 
-// ✅ package-level variable
-var slugRegex = regexp.MustCompile(`^[a-z0-9]+(?:-[a-z0-9]+)*$`)
+// GET /api/v2/products?search=&limit=
+func (h *ProductHandler) SearchProducts(c *gin.Context) {
+	search := c.Query("search")
 
-// GET /api/v2/products/:slug
-func (h *ProductHandler) GetProductBySlug(c *gin.Context) {
-	slug := c.Param("slug")
-
-	if !slugRegex.MatchString(slug) {
+	limit, err := validator.ParseLimit(c.Query("limit"))
+	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "invalid product slug format",
+			"error": err.Error(),
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"slug":    slug,
-		"message": "Product found (v2)",
+		"search": search,
+		"limit":  limit,
 	})
+}
+
+// GET /api/v2/products/:slug
+func (h *ProductHandler) GetProductBySlug(c *gin.Context) {
+	slug := c.Param("slug")
+
+	if !validator.IsValidSlug(slug) {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "invalid slug",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"slug": slug})
 }

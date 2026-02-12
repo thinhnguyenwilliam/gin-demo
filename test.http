@@ -1,6 +1,25 @@
 ### Base URL
 @baseUrl = http://localhost:8085
 
+### Search default limit
+GET http://localhost:8085/api/v2/products?search=iphone
+
+### Custom limit
+GET http://localhost:8085/api/v2/products?search=iphone&limit=5
+
+### Invalid limit
+GET http://localhost:8085/api/v2/products?limit=abc
+
+### Over max limit
+GET http://localhost:8085/api/v2/products?limit=1000
+
+###
+GET http://localhost:8085/api/v2/categories/php
+
+###
+GET http://localhost:8085/api/v2/categories/java
+
+
 ### Valid slug
 GET http://localhost:8085/api/v2/products/iphone-15-pro
 

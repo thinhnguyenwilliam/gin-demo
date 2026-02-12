@@ -23,11 +23,18 @@ func main() {
 	// =========================
 	v2 := r.Group("/api/v2")
 
+	categoryHandlerV2 := v2handler.NewCategoryHandler()
 	productHandlerV2 := v2handler.NewProductHandler()
 	userHandlerV2 := v2handler.NewUserHandler()
 
+	categories := v2.Group("/categories")
+	{
+		categories.GET("/:name", categoryHandlerV2.GetCategory)
+	}
+
 	products := v2.Group("/products")
 	{
+		products.GET("", productHandlerV2.SearchProducts) // query search
 		products.GET("/:slug", productHandlerV2.GetProductBySlug)
 	}
 
