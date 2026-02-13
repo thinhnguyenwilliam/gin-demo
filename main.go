@@ -6,11 +6,13 @@ import (
 
 	"github.com/gin-gonic/gin"
 	v2handler "github.com/thinhnguyenwilliam/gin-demo/internal/api/v2/handler"
+	"github.com/thinhnguyenwilliam/gin-demo/internal/config"
 	"github.com/thinhnguyenwilliam/gin-demo/internal/middleware"
 	"github.com/thinhnguyenwilliam/gin-demo/utils"
 )
 
 func main() {
+	config.LoadConfig()
 	r := gin.Default()
 	r.Use(middleware.RequestLogger())
 
@@ -35,6 +37,8 @@ func main() {
 	// API V2 Group
 	// =========================
 	v2 := r.Group("/api/v2")
+	v2.Use(middleware.APIKeyAuth())
+	v2.Use(middleware.RateLimitMiddleware())
 
 	categoryHandlerV2 := v2handler.NewCategoryHandler()
 	productHandlerV2 := v2handler.NewProductHandler()
