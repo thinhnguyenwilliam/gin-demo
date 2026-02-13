@@ -5,30 +5,33 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
+	"github.com/thinhnguyenwilliam/gin-demo/utils"
 )
 
-type UserHandler struct{}
+type UserHandler struct {
+}
 
 func NewUserHandler() *UserHandler {
 	return &UserHandler{}
 }
 
+// Struct for validation
+type getUserRequest struct {
+	ID string `uri:"id" binding:"required,uuid"`
+}
+
 // GET /api/v2/users/:id
 func (h *UserHandler) GetUserByID(c *gin.Context) {
-	id := c.Param("id")
+	var req getUserRequest
 
-	// Validate UUID
-	if _, err := uuid.Parse(id); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "invalid user id (must be UUID)",
-		})
+	// Bind URI params + validate automatically
+	if err := c.ShouldBindUri(&req); err != nil {
+		c.JSON(http.StatusBadRequest, utils.HandleValidationErrors(err))
 		return
 	}
 
-	// Simulate response
 	c.JSON(http.StatusOK, gin.H{
-		"id":      id,
+		"id":      req.ID,
 		"message": "User found (v2)",
 	})
 }

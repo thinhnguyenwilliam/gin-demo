@@ -1,11 +1,86 @@
 ### Base URL
 @baseUrl = http://localhost:8085
 
+###
+GET http://localhost:8085/uploads/3b964877-effc-4853-ab7c-9da229c4e58a.png
+
+
+
+### Upload Category
+POST {{baseUrl}}/api/v2/categories/upload
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="name"
+
+Technology
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="is_active"
+
+true
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="image"; filename="test.jpg"
+Content-Type: image/jpeg
+
+< ./test.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+
+###
+POST {{baseUrl}}/api/v2/categories
+Content-Type: application/x-www-form-urlencoded
+
+name=Technology&description=Tech category&is_active=true
+
+
+###
+POST {{baseUrl}}/api/v2/products
+Content-Type: application/json
+
+{
+  "name": "iPhone 15",
+  "slug": "iphone-15",
+  "price": 999.99,
+  "category": "golang",
+  "description": "Latest Apple product",
+  "is_active": true,
+  "images": [
+    {
+      "link": "https://example.com/iphone."
+    },
+    {
+      "link": "https://example.com/iphone1.jpg"
+    }
+  ]
+}
+
+
+###
+POST {{baseUrl}}/api/v2/products
+Content-Type: application/json
+
+{
+  "name": "a",
+  "slug": "IPHONE",
+  "price": -5,
+  "category": "java",
+  "is_active": false
+}
+
+
+
+###
+GET http://localhost:8085/api/v2/news
+
+###
+GET http://localhost:8085/api/v2/news/golang-1-22-released
+
+
 ### Search default limit
 GET http://localhost:8085/api/v2/products?search=iphone
 
 ### Custom limit
-GET http://localhost:8085/api/v2/products?search=iphone&limit=5
+GET http://localhost:8085/api/v2/products?search=iphone&limit=101
 
 ### Invalid limit
 GET http://localhost:8085/api/v2/products?limit=abc
