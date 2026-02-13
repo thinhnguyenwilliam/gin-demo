@@ -1,3 +1,4 @@
+// gin-demo/internal/logger/logger.go
 package logger
 
 import (
@@ -18,11 +19,11 @@ var (
 )
 
 func Init() {
-	os.MkdirAll("logs", os.ModePerm)
+	_ = os.MkdirAll("logs", os.ModePerm)
 
 	createNewLogFile()
 
-	go scheduleRotation()
+	go scheduleMidnightRotation()
 	go cleanupOldLogs()
 }
 
@@ -31,13 +32,14 @@ func createNewLogFile() {
 	defer mu.Unlock()
 
 	if file != nil {
-		file.Close()
+		_ = file.Close()
 	}
 
 	filename := fmt.Sprintf("logs/app-%s.log",
 		time.Now().Format("2006-01-02"))
 
-	f, err := os.OpenFile(filename,
+	f, err := os.OpenFile(
+		filename,
 		os.O_CREATE|os.O_WRONLY|os.O_APPEND,
 		0666,
 	)
@@ -55,20 +57,18 @@ func createNewLogFile() {
 		Logger()
 }
 
-func scheduleRotation() {
+func scheduleMidnightRotation() {
 	for {
 		now := time.Now()
+
+		// Next midnight (00:00)
 		next := time.Date(
 			now.Year(),
 			now.Month(),
-			now.Day(),
-			19, 0, 0, 0, // 7:00 PM
+			now.Day()+1,
+			0, 0, 0, 0,
 			now.Location(),
 		)
-
-		if now.After(next) {
-			next = next.Add(24 * time.Hour)
-		}
 
 		time.Sleep(time.Until(next))
 
@@ -81,7 +81,6 @@ func cleanupOldLogs() {
 		time.Sleep(24 * time.Hour)
 
 		files, _ := filepath.Glob("logs/*.log")
-
 		cutoff := time.Now().AddDate(0, 0, -90)
 
 		for _, f := range files {
@@ -91,7 +90,7 @@ func cleanupOldLogs() {
 			}
 
 			if info.ModTime().Before(cutoff) {
-				os.Remove(f)
+				_ = os.Remove(f)
 			}
 		}
 	}
