@@ -6,11 +6,13 @@ import (
 
 	"github.com/gin-gonic/gin"
 	v2handler "github.com/thinhnguyenwilliam/gin-demo/internal/api/v2/handler"
+	"github.com/thinhnguyenwilliam/gin-demo/internal/middleware"
 	"github.com/thinhnguyenwilliam/gin-demo/utils"
 )
 
 func main() {
 	r := gin.Default()
+	r.Use(middleware.RequestLogger())
 
 	// ✅ Set max upload size (8MB total request size)
 	r.MaxMultipartMemory = 8 << 20 // 8MB
