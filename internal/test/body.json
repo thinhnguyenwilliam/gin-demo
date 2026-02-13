@@ -1,0 +1,8 @@
+{
+  "name": "iPhone 15",
+  "slug": "iphone-15",
+  "price": 999.99,
+  "category": "golang",
+  "description": "Latest Apple product",
+  "is_active": true
+}

@@ -1,5 +1,6 @@
 ### Base URL
 @baseUrl = http://localhost:8085
+@apikey = my-super-secret-key
 
 ###
 GET http://localhost:8085/uploads/3b964877-effc-4853-ab7c-9da229c4e58a.png
@@ -36,6 +37,7 @@ name=Technology&description=Tech category&is_active=true
 ###
 POST {{baseUrl}}/api/v2/products
 Content-Type: application/json
+x-api-key: {{apikey}}
 
 {
   "name": "iPhone 15",
@@ -71,6 +73,7 @@ Content-Type: application/json
 
 ###
 GET http://localhost:8085/api/v2/news
+x-api-key: {{apikey}}
 
 ###
 GET http://localhost:8085/api/v2/news/golang-1-22-released
