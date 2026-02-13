@@ -2,10 +2,10 @@
 package middleware
 
 import (
-	"log"
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/thinhnguyenwilliam/gin-demo/internal/logger"
 )
 
 func RequestLogger() gin.HandlerFunc {
@@ -13,14 +13,13 @@ func RequestLogger() gin.HandlerFunc {
 
 		start := time.Now()
 
-		// before handler
-		log.Println("Incoming request:", c.Request.Method, c.Request.URL.Path)
-
-		// continue to next
 		c.Next()
 
-		// after handler
-		duration := time.Since(start)
-		log.Println("Request completed in:", duration)
+		logger.Log.Info().
+			Str("method", c.Request.Method).
+			Str("path", c.Request.URL.Path).
+			Int("status", c.Writer.Status()).
+			Dur("latency", time.Since(start)).
+			Msg("request completed")
 	}
 }

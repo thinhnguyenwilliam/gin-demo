@@ -7,13 +7,17 @@ import (
 	"github.com/gin-gonic/gin"
 	v2handler "github.com/thinhnguyenwilliam/gin-demo/internal/api/v2/handler"
 	"github.com/thinhnguyenwilliam/gin-demo/internal/config"
+	"github.com/thinhnguyenwilliam/gin-demo/internal/logger"
 	"github.com/thinhnguyenwilliam/gin-demo/internal/middleware"
 	"github.com/thinhnguyenwilliam/gin-demo/utils"
 )
 
 func main() {
 	config.LoadConfig()
-	r := gin.Default()
+	logger.Init()
+
+	r := gin.New()
+	r.Use(gin.Recovery())
 	r.Use(middleware.RequestLogger())
 
 	// ✅ Set max upload size (8MB total request size)
